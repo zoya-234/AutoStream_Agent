@@ -1,29 +1,7 @@
-from langchain_ollama import ChatOllama
-# from agent.rag import retrieve_answer
-# from agent.intent import classify_intent
-from agent.agent_logic import agent_step
+from agent.graph import build_graph
 from agent.state import AgentState
 
-
-llm = ChatOllama(
-    model="llama3:8b",
-    temperature=0
-)
-
-response = llm.invoke("Say hello in one sentence")
-print(response.content)
-
-# print(retrieve_answer("Tell me about pricing"))
-# print(retrieve_answer("What is your refund policy?"))
-
-# tests = [
-#     "Hi there!",
-#     "Can you tell me about your pricing?",
-#     "I want to try the Pro plan for my YouTube channel"
-# ]
-
-# for t in tests:
-#     print(t, "→", classify_intent(t))
+app = build_graph()
 
 state: AgentState = {
     "messages": [],
@@ -41,7 +19,7 @@ while True:
     if user_input.lower() == "exit":
         break
 
-    # Capture user-provided details
+    # Capture lead details if in lead mode
     if state["lead_mode"]:
         if state["name"] is None:
             state["name"] = user_input
@@ -49,5 +27,11 @@ while True:
             state["email"] = user_input
         elif state["platform"] is None:
             state["platform"] = user_input
-    state = agent_step(state, user_input)
+
+    # Add user message to state
+    state["messages"].append(user_input)
+
+    # Run LangGraph
+    state = app.invoke(state)
+
     print("Agent:", state["messages"][-1])
