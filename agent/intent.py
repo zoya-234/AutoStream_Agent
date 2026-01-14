@@ -1,11 +1,7 @@
-from langchain_ollama import ChatOllama
 from langchain_core.prompts import PromptTemplate
+from agent.llm import get_llm
 
-
-llm = ChatOllama(
-    model="llama3:8b",
-    temperature=0
-)
+llm = get_llm()
 
 intent_prompt = PromptTemplate.from_template("""
 You are an intent classification system for a SaaS AI agent.
