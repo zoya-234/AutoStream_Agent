@@ -141,5 +141,3 @@ To deploy this agent on WhatsApp:
 * Map each WhatsApp user ID to an agent state (stored in Redis or a database)
 * Forward user messages to the LangGraph agent
 * Send agent responses back via the WhatsApp API
-
-This allows persistent, real-time social-to-lead automation across conversations, aligning directly with Inflx’s use case.
